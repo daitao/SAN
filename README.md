@@ -7,8 +7,7 @@ The code is built on [RCAN(pytorch)](https://github.com/yulunzhang/RCAN) and tes
 ### 1. Introduction
 - **Abstract:**
 Recently, deep convolutional neural networks (CNNs) have been widely explored in single image super-resolution (SISR) and obtained remarkable performance. However, most of the existing CNN-based SISR methods mainly focus on wider or deeper architecture design, neglecting to explore the feature correlations of intermediate layers, hence hindering the representational power of CNNs. To address this issue, in this paper, we propose a second-order attention network (SAN) for more powerful feature expression and feature correlation learning. Specifically, a novel train- able second-order channel attention (SOCA) module is developed to adaptively rescale the channel-wise features by using second-order feature statistics for more discriminative representations. Furthermore, we present a non-locally enhanced residual group (NLRG) structure, which not only incorporates non-local operations to capture long-distance spatial contextual information, but also contains repeated local-source residual attention groups (LSRAG) to learn increasingly abstract feature representations. Experimental results demonstrate the superiority of our SAN network over state-of-the-art SISR methods in terms of both quantitative metrics and visual quality.
-- Main framework
-![Alt text](Figure/main framework.png)
+
 
 ### 2. Train code
 #### Prepare training datasets
@@ -17,34 +16,44 @@ Recently, deep convolutional neural networks (CNNs) have been widely explored in
 
 #### Train the model
 - You can retrain the model: 
-	- 1. CD to 'TrainCode/code'; 
-	- 2. Run the following scripts to train the models:
-	
+  - 1. CD to 'TrainCode/code'; 
+  - 2. Run the following scripts to train the models:
+  
 
 >  
->  # BI degradation, scale 2, 3, 4,8
->  # input= $48\times 48$, output = $96\times 96$
+> 
+>  ## BI degradation, scale 2, 3, 4,8
+>  ## input= 48x48, output = 96x96
 >  python main.py  --model san  --save `save_name`  --scale 2 --n_resgroups 20 --n_resblocks 10 --n_feats 64 --reset --chop --save_results --patch_size 96
->  # input= $48\times 48$, output = $144\times 144$
+>  ## input= 48x48, output = 144x144
 >  python main.py  --model san  --save `save_name`  --scale 3 --n_resgroups 20 --n_resblocks 10 --n_feats 64 --reset --chop --save_results --patch_size 96
->  # input= $48\times 48$, output = $192\times 192$
+>  ## input= 48x48, output = 192x192
 >  python main.py  --model san  --save `save_name`  --scale 4 --n_resgroups 20 --n_resblocks 10 --n_feats 64 --reset --chop --save_results --patch_size 96
->  # input= $48\times 48$, output = $392\times 392$
+>  ## input= 48x48, output = 392x392
 >  python main.py  --model san  --save `save_name`  --scale 8 --n_resgroups 20 --n_resblocks 10 --n_feats 64 --reset --chop --save_results --patch_size 96
+>
 
 ### 3. Test code
 -  1. You can Download the pretrained model first
 -  2. CD to 'TestCode/code', run the following scripts
+
 >  
->  # BI degradation, scale 2, 3, 4,8
->  # SAN_2x
+>  ## BI degradation, scale 2, 3, 4,8
+>  ## SAN_2x
+> 
 >  python main.py  --model san  --data_test MyImage  --save `save_name`  --scale 2 --n_resgroups 20 --n_resblocks 10 --n_feats 64 --reset --chop --save_results --test_only --testpath 'your path' --testset Set5  --pre_train ../model/SAN_BIX2.pt
->  # SAN_3x
+> 
+>  # SAN_3x   
+> 
 >  python main.py  --model san --data_test MyImage  --save `save_name`  --scale 3 --n_resgroups 20 --n_resblocks 10 --n_feats 64 --reset --chop --save_results --test_only --testpath 'your path' --testset Set5  --pre_train ../model/SAN_BIX3.pt
+> 
 >  # SAN_4x
 >  python main.py  --model san --data_test MyImage  --save `save_name`  --scale 4 --n_resgroups 20 --n_resblocks 10 --n_feats 64 --reset --chop --save_results --test_only --testpath 'your path' --testset Set5  --pre_train ../model/SAN_BIX4.pt
+> 
 >  # SAN_8x
+> 
 >  python main.py  --model san --data_test MyImage  --save `save_name`  --scale 8 --n_resgroups 20 --n_resblocks 10 --n_feats 64 --reset --chop --save_results --test_only --testpath 'your path' --testset Set5  --pre_train ../model/SAN_BIX8.pt
+> 
 ### 4. Results
 - Some of the test results can be downloaded.
 
@@ -52,14 +61,16 @@ Recently, deep convolutional neural networks (CNNs) have been widely explored in
 If the the work or the code is helpful, please cite the following papers
 
 > @inproceedings{dai2019second,
-  title={Second-order Attention Network for Single Image Super-Resolution},
+> 
+> title={Second-order Attention Network for Single Image Super-Resolution},
   author={Dai, Tao and Cai, Jianrui and Zhang, Yongbing and Xia, Shu-Tao and Zhang, Lei},
   booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
   pages={11065--11074},
   year={2019}
 }
 
-@inproceedings{zhang2018image,
+> @inproceedings{zhang2018image,
+> 
   title={Image super-resolution using very deep residual channel attention networks},
   author={Zhang, Yulun and Li, Kunpeng and Li, Kai and Wang, Lichen and Zhong, Bineng and Fu, Yun},
   booktitle={Proceedings of the European Conference on Computer Vision (ECCV)},
@@ -67,8 +78,8 @@ If the the work or the code is helpful, please cite the following papers
   year={2018}
 }
 
-@inproceedings{li2017second,
-  title={Is second-order information helpful for large-scale visual recognition?},
+> @inproceedings{li2017second,
+>  title={Is second-order information helpful for large-scale visual recognition?},
   author={Li, Peihua and Xie, Jiangtao and Wang, Qilong and Zuo, Wangmeng},
   booktitle={Proceedings of the IEEE International Conference on Computer Vision},
   pages={2070--2078},

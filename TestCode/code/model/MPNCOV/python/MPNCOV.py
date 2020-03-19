@@ -21,9 +21,10 @@ class Covpool(Function):
          w = x.data.shape[3]
          M = h*w
          x = x.reshape(batchSize,dim,M)
-         I_hat = (-1./M/M)*torch.ones(M,M,device = x.device) + (1./M)*torch.eye(M,M,device = x.device)
-         I_hat = I_hat.view(1,M,M).repeat(batchSize,1,1).type(x.dtype)
-         y = x.bmm(I_hat).bmm(x.transpose(1,2))
+         I_hat = torch.empty(M, M, device=x.device).fill_(-1./M/M)
+         I_hat_diag = I_hat.diagonal()
+         I_hat_diag += (1./M)
+         y = x @ I_hat @ x.transpose(1,2)
          ctx.save_for_backward(input,I_hat)
          return y
      @staticmethod
@@ -37,7 +38,7 @@ class Covpool(Function):
          M = h*w
          x = x.reshape(batchSize,dim,M)
          grad_input = grad_output + grad_output.transpose(1,2)
-         grad_input = grad_input.bmm(x).bmm(I_hat)
+         grad_input = grad_input @ x @ I_hat
          grad_input = grad_input.reshape(batchSize,dim,h,w)
          return grad_input
 

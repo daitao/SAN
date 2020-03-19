@@ -24,7 +24,7 @@ class Covpool(Function):
          I_hat = torch.empty(M, M, device=x.device).fill_(-1./M/M)
          I_hat_diag = I_hat.diagonal()
          I_hat_diag += (1./M)
-         y = (x @ I_hat).bmm(x.transpose(1,2))
+         y = x @ I_hat @ x.transpose(1,2)
          ctx.save_for_backward(input,I_hat)
          return y
      @staticmethod
@@ -38,7 +38,7 @@ class Covpool(Function):
          M = h*w
          x = x.reshape(batchSize,dim,M)
          grad_input = grad_output + grad_output.transpose(1,2)
-         grad_input = grad_input.bmm(x).bmm(I_hat)
+         grad_input = grad_input @ x @ I_hat
          grad_input = grad_input.reshape(batchSize,dim,h,w)
          return grad_input
 
